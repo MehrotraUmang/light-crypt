@@ -14,7 +14,6 @@ import hashlib
 import secrets
 import binascii
 import eel
-import logic.todo_controller
 
 eel.init('web')
 
@@ -104,4 +103,4 @@ def process(task):
     return list
 
 
-eel.start('index.html')
+eel.start('index.html', mode='chrome')

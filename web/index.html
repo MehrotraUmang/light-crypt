@@ -5,8 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Cryptography for securing data using combination of AES & ECC
-    </title>
+    <script src="logic.js"></script>
+    <script src="/eel.js"></script>
+
+    <title>LightCrypt</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -25,9 +27,9 @@
                 <div class="column">
                     <div class="input-box">
                         <label><b>ECC Keys</b></label>
-                        <span type="text" id="eccprkey"></span>
+                        <span type="text" id="eccprvkey"></span>
                         <br>
-                        <span type="text" id="eccpkey"></span>
+                        <span type="text" id="eccpubkey"></span>
                     </div>
                 </div>
 
@@ -43,44 +45,21 @@
                     <span type="text" id="ciphertext"></span>
                 </div>
 
-                <button onclick="getmessage()" id="decrypt">Decrypt</button>
+                <button onclick="getMessage()" id="decrypt">Decrypt</button>
                 <div class="input-box">
                     <label><b>Original Plain Text</b></label><br>
                     <span type="text" id="plaintext"></span>
                 </div>
-                <button onclicik="reset()" id="reset">Reset</button>
+                <button onclick="reset()" id="reset">Reset</button>
             </div>
         </form>
     </section>
-    <script type="text/javascript" src="/eel.js"></script>
-
-
-
-    <script type="text/javascript">
-        function getList() {
-            eel.process(taskinp.value)(function (my_list) {
-                document.getElementById('eccprkey').innerHTML = my_list[0];
-                document.getElementById('eccpkey').innerHTML = my_list[1];
-                document.getElementById('aeskey').innerHTML = my_list[2];
-                document.getElementById('ciphertext').innerHTML = my_list[3];
-            });
-        }
-    </script>
-
-    <script type="text/javascript">
-        function getmessage() {
-            eel.process(taskinp.value)(function (my_list1) {
-                document.getElementById('plaintext').innerHTML = my_list1[4];
-
-            });
-        }
-    </script>
-
+    
     <script typ="text/javascript">
         document.getElementById("reset").onclick = function () {
             document.getElementById("taskinp").value = "";
-            document.getElementById("eccprkey").innerHTML = "";
-            document.getElementById("eccpkey").innerHTML = "";
+            document.getElementById("eccprvkey").innerHTML = "";
+            document.getElementById("eccpubkey").innerHTML = "";
             document.getElementById("aeskey").innerHTML = "";
             document.getElementById("ciphertext").innerHTML = "";
             document.getElementById("plaintext").innerHTML = "";
@@ -88,12 +67,5 @@
 
     </script>
 </body>
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equic="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EEL APP</title>
-</head>
 
 </html>
