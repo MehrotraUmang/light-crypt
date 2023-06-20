@@ -14,12 +14,3 @@ function getMessage() {
         document.getElementById('plaintext').innerHTML = my_list1[4];
     });
 }
-
-document.getElementById("reset").onclick = function reset () {
-    document.getElementById("taskinp").value = "";
-    document.getElementById("eccprvkey").innerHTML = "";
-    document.getElementById("eccpubkey").innerHTML = "";
-    document.getElementById("aeskey").innerHTML = "";
-    document.getElementById("ciphertext").innerHTML = "";
-    document.getElementById("plaintext").innerHTML = "";
-};
