@@ -19,7 +19,7 @@
             <div>
                 <div class="input-box">
                     <label><b>Enter Plain Text</b></label>
-                    <input type="text" placeholder="Enter text to be encrypted" id="taskinp" />
+                    <input type="text" placeholder="Enter text to be encrypted" id="textInp">
                 </div>
 
                 <button onclick="getList()" id="encrypt">Encrypt</button>
@@ -57,7 +57,7 @@
     
     <script typ="text/javascript">
         document.getElementById("reset").onclick = function () {
-            document.getElementById("taskinp").value = "";
+            document.getElementById("textInp").value = "";
             document.getElementById("eccprvkey").innerHTML = "";
             document.getElementById("eccpubkey").innerHTML = "";
             document.getElementById("aeskey").innerHTML = "";
