@@ -106,7 +106,6 @@ def process(task):
     list.append(str(DECRYPTED))
     print(list)
 
-
     return list
 
 
