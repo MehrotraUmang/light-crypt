@@ -16,10 +16,10 @@ def process(task):
     pubKey = privKey * curve.g
     # print("pubKey: ", pubKey)
 
-    list = []
-    list.append(str(privKey))
-    list.append(str(pubKey))
-    list.append(str(ecc_point_to_256_bit_key(
+    objList = []
+    objList.append(str(privKey))
+    objList.append(str(pubKey))
+    objList.append(str(ecc_point_to_256_bit_key(
         secrets.randbelow(curve.field.n) * pubKey)))
 
 
@@ -38,7 +38,7 @@ def process(task):
     print("encrypted msg:", encryptedMsgObj)
 
     # get_data encryptedMsgObj as ciphertext
-    list.append(str(encryptedMsgObj))
+    objList.append(str(encryptedMsgObj))
 
     # get decrypted message using encryptedMsg and privKey
     decryptedMsg = decrypt_ECC(encryptedMsg, privKey)
@@ -47,9 +47,9 @@ def process(task):
     # get_data DECRYPTED as Decrypted text
     DECRYPTED = decryptedMsg.decode("ascii")
 
-    list.append(str(DECRYPTED))
-    print(list)
+    objList.append(str(DECRYPTED))
+    print(objList)
 
-    return list
+    return objList
 
 eel.start('index.html', mode='chrome')
