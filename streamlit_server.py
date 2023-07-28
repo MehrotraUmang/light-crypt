@@ -5,6 +5,8 @@ Todo:
 '''
 import streamlit as st
 from ecc_aes import *
+from io import StringIO
+
 
 globalList = []
 
@@ -90,7 +92,19 @@ def resetCallback():
 #########################################
 st.title('Encryption & Decryption using ECC+AES')
 st.subheader('LightCrypt Demonstration')
-st.text_input('Enter Plaintext', key="plainText", placeholder='Type or paste plaintext here ...')
+
+uploaded_file = st.file_uploader("Upload a file", type=['txt'])
+if uploaded_file is not None:
+    # To read file as string:
+    stringio = StringIO(uploaded_file.getvalue().decode("ascii"))
+    string_data = stringio.read()
+    st.text_input('Enter Plaintext', key="plainText", value=string_data, 
+                  placeholder='Type or paste plaintext here ...')  
+else:
+    
+        st.text_input('Enter Plaintext', key="plainText", 
+                  placeholder='Type or paste plaintext here ...')
+
 heightFix = None
 st.button(label='Encrypt', key='encryptBtn', 
           on_click=encryptCallback,
