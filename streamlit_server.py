@@ -1,17 +1,21 @@
 '''
 Todo: 
 refactor saveCallback()
+add savePayload button
 refactor acklowledgeCallback()
 Complete Cloud tab feature
+{gdrive py api, streamlit secrets for api token}
 
 Comments:
 added tabs, generate data frontend, added data_generator.py, 
 pending tasks in todo
 '''
 import streamlit as st
+import time
 from ecc_aes import *
 from data_generator import *
 from io import StringIO
+
 
 
 globalList = []
@@ -95,7 +99,10 @@ def resetCallback():
     st.session_state.decryptedText = ''
     
 def acknowledgeCallback():
-    st.success('This is a success message!', icon="✅")
+    alert = st.success('Acknowledge Success, Directory Cleared')
+    time.sleep(3)
+    alert.empty()
+
 
 #########################################
 # Stereamlit frontend
@@ -188,11 +195,19 @@ with tab3:
               args=None,
               type="secondary", 
               use_container_width=False)
-    st.button(label='Acknowledge', key=None, 
+with tab4:
+    st.button(label='Upload', key=None, 
               help='Acknowledge will delete input file contents', 
               on_click=acknowledgeCallback, 
               args=None,
               type="primary", 
+              use_container_width=False)
+    
+    st.button(label='Acknowledge', key=None, 
+              help='Acknowledge will delete input file contents', 
+              on_click=acknowledgeCallback, 
+              args=None,
+              type="secondary", 
               use_container_width=False)
 
     
