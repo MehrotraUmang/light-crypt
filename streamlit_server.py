@@ -83,7 +83,16 @@ def process(message):
 # Stereamlit button callback functions
 #########################################
 def saveCallback():
-    st.info('File saved!')
+    if file_type == "CSV":
+        generate_csv(num_rows=st.session_state.num_row, 
+                     num_columns=st.session_state.num_col, 
+                     filename=st.session_state.csv_filename)
+        st.info('CSV saved!')
+
+    else:
+        generate_txt(num_tokens=st.session_state.num_tokens, 
+                     filename=st.session_state.txt_filename)
+        st.info('TXT Saved!')
 def encryptCallback():
     process(st.session_state.plainText)
 
@@ -110,8 +119,8 @@ def acknowledgeCallback():
 hide_streamlit_style = """
                 <style>
                 footer {visibility: hidden;}
-                </style>
                 """
+
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 st.title('Encryption & Decryption using ECC+AES')
@@ -123,13 +132,13 @@ with tab1:
         file_type = st.radio("Select data type", ["CSV", "TXT"])
     if file_type == "CSV":
         with col2:    
-            st.number_input('Number of rows', min_value = 1, max_value = 1000, step=1)
-            st.number_input('Number of columns', min_value = 1, max_value = 1000, step=1)
+            st.number_input(key='num_row',label='Number of rows', min_value = 1, max_value = 1000, step=1)
+            st.number_input(key='num_col', label='Number of columns', min_value = 1, max_value = 1000, step=1)
         with col3:
             st.text_input('Filename', key='csv_filename',value='random_dataset.csv', max_chars=25)
     else:
         with col2:
-            st.number_input('Number of tokens', min_value = 1, max_value = 1000, step=1)
+            st.number_input(key='num_tokens', label='Number of tokens', min_value = 1, max_value = 1000, step=1)
         with col3:
             st.text_input('Filename', key='txt_filename',value='random_text.txt', max_chars=25)
     with col3: 
