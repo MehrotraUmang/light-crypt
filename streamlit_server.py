@@ -87,12 +87,12 @@ def saveCallback():
         generate_csv(num_rows=st.session_state.num_row, 
                      num_columns=st.session_state.num_col, 
                      filename=st.session_state.csv_filename)
-        st.info('CSV saved!')
+        st.info(f'{st.session_state.csv_filename} saved at project directory!')
 
     else:
         generate_txt(num_tokens=st.session_state.num_tokens, 
                      filename=st.session_state.txt_filename)
-        st.info('TXT Saved!')
+        st.info(f'{st.session_state.txt_filename} saved at project directory!')
 def encryptCallback():
     process(st.session_state.plainText)
 

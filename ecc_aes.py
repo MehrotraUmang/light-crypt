@@ -1,5 +1,4 @@
 """
-Todo: eel variables for the followning:
     ECC Private Key : privKey
     AES Key         : secretKey
     ECC Public Key  : pubKey
