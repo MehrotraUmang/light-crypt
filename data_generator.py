@@ -32,5 +32,5 @@ def generate_txt(num_tokens, filename='random_text.txt'):
         file.write(str(text))
 
     print(f'Generated {num_tokens} tokens into {filename}')
-generate_txt(num_tokens=1, filename="random_text.txt")
+
 
