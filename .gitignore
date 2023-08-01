@@ -1,6 +1,7 @@
 data/__pycache__
 logic/__pycache
 *.txt
+!requirements.txt
 *.csv
 __pycache__/
 *.pyc
