@@ -15,6 +15,7 @@ import time
 from ecc_aes import *
 from data_generator import *
 from io import StringIO
+import pandas as pd
 
 
 
@@ -93,6 +94,7 @@ def saveCallback():
         generate_txt(num_tokens=st.session_state.num_tokens, 
                      filename=st.session_state.txt_filename)
         st.info(f'{st.session_state.txt_filename} saved at project directory!')
+
 def encryptCallback():
     process(st.session_state.plainText)
 
@@ -119,6 +121,7 @@ def acknowledgeCallback():
 hide_streamlit_style = """
                 <style>
                 footer {visibility: hidden;}
+                </style>
                 """
 
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -154,6 +157,10 @@ with tab2:
         string_data = stringio.read()
         st.text_input('Enter Plaintext', key="plainText", value=string_data, 
                       placeholder='Type or paste plaintext here ...')  
+        if uploaded_file.type == 'text/csv':
+            df = pd.read_csv(uploaded_file)
+            st.dataframe(df)
+        
     else:
 
             st.text_input('Enter Plaintext', key="plainText", 
