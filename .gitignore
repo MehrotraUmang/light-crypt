@@ -3,3 +3,4 @@ logic/__pycache
 *.txt
 *.csv
 __pycache__/
+*.pyc
