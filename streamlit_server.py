@@ -8,8 +8,7 @@ Complete Cloud tab feature
 {gdrive py api, streamlit secrets for api token}
 
 comments:
-saveCallback -> saveGeneratedCallback, added saveCiphertext button, ciphertext file name,
-
+decryptCallback Rewrite, session_state objList changes, exception handling
 '''
 import streamlit as st
 import time
@@ -17,10 +16,13 @@ from ecc_aes import *
 from data_generator import *
 from io import StringIO
 import pandas as pd
+import ast
+import os
 
 
-
-globalList = []
+# Initialize objList in session state
+if 'objList' not in st.session_state:
+    st.session_state.objList = [None, None, None, None, None]
 
 #########################################
 # main process function
@@ -38,17 +40,21 @@ def process(message):
     pubKey = privKey * curve.g
     # print("pubKey: ", pubKey)
 
-    objList = []
+    #st.session_state.objList.append(str(privKey))
+    st.session_state.objList[0] = str(privKey)
 
-    objList.append(str(privKey))
-    st.session_state.eccPrivKey = objList[0]
+    st.session_state.eccPrivKey = st.session_state.objList[0]
 
-    objList.append(str(pubKey))
-    st.session_state.eccPubKey = objList[1]
+    
+    #st.session_state.objList.append(str(pubKey))
+    st.session_state.objList[1] = str(pubKey)
+    st.session_state.eccPubKey = st.session_state.objList[1]
 
-    objList.append(str(ecc_point_to_256_bit_key(
-        secrets.randbelow(curve.field.n) * pubKey)))
-    st.session_state.aesPrivKey = objList[2]
+    aesPrivKey = ecc_point_to_256_bit_key(secrets.randbelow(curve.field.n) * pubKey)
+
+    #st.session_state.objList.append(str(aesPrivKey))
+    st.session_state.objList[2] = str(aesPrivKey)
+    st.session_state.aesPrivKey = st.session_state.objList[2]
 
 
     print("\n\naes key: ", ecc_point_to_256_bit_key(
@@ -66,8 +72,10 @@ def process(message):
     print("encrypted msg:", encryptedMsgObj)
 
     # get_data encryptedMsgObj as ciphertext
-    objList.append(str(encryptedMsgObj))
-    st.session_state.cipherText = objList[3]
+    
+    #st.session_state.objList.append(str(encryptedMsgObj))
+    st.session_state.objList[3] = str(encryptedMsgObj)
+    st.session_state.cipherText = st.session_state.objList[3]
 
     # get decrypted message using encryptedMsg and privKey
     decryptedMsg = decrypt_ECC(encryptedMsg, privKey)
@@ -76,10 +84,11 @@ def process(message):
     # get_data DECRYPTED as Decrypted text
     DECRYPTED = decryptedMsg.decode("ascii")
 
-    objList.append(str(DECRYPTED))
-    print(objList)
+    #st.session_state.objList.append(str(DECRYPTED))
+    st.session_state.objList[4] = str(DECRYPTED)
 
-    return objList
+    print(st.session_state.objList)
+    
     
 #########################################
 # Stereamlit button callback functions
@@ -100,10 +109,51 @@ def encryptCallback():
     process(st.session_state.plainText)
 
 def decryptCallback():
-    st.session_state.decryptedText = st.session_state.plainText
+    #Warning: needs exception handling if index 4 does not exist
+    st.session_state.decryptedText = st.session_state.objList[4]
+    # experimental: process decrypt when clicked
+    # instead of printing already decrypted value at objList[4]
+    # assigned when process() is called
 
 def saveCiphertextCallback():
-    st.info("saved ciphertext")
+    # Warning: does not work when objList is cleared or resetCallback is called before
+    # Exception handling required
+    ciphertext_filename =  st.session_state.ciphertext_filename
+    
+    try:
+        ciphertext_str = st.session_state.objList[3]  # Assuming objList[3] is a string
+        
+        # Convert the string representation of the dictionary to a dictionary
+        try:
+            ciphertext_dict = ast.literal_eval(ciphertext_str)
+        except (ValueError, SyntaxError):
+            st.error("Error: Unable to parse the ciphertext data.")
+        try:
+            if 'ciphertext' in ciphertext_dict:
+                ciphertext = ciphertext_dict['ciphertext']
+
+                # Create the "ciphertext" directory if it doesn't exist
+                ciphertext_dir = 'ciphertext'
+                os.makedirs(ciphertext_dir, exist_ok=True)
+
+                # Construct the full file path
+                full_file_path = os.path.join(ciphertext_dir, ciphertext_filename)
+
+                try:
+                    with open(full_file_path, 'wb') as file:
+                        file.write(ciphertext)
+                    st.info(f'Ciphertext saved at {full_file_path}')
+                except Exception as e:
+                    st.error(f"Error saving ciphertext: {str(e)}")
+        
+            else:
+                st.error("Error: Ciphertext not found in the dictionary.")
+
+        except UnboundLocalError:
+             st.error("Error: Ciphertext not found in the dictionary.")
+        
+    except IndexError:
+        st.error("Ciphertext not available. Please encrypt a message first.")
     
 def resetCallback():
     st.session_state.plainText = ''
@@ -112,6 +162,7 @@ def resetCallback():
     st.session_state.aesPrivKey = ''
     st.session_state.cipherText = ''
     st.session_state.decryptedText = ''
+    st.session_state.objList = [None, None, None, None, None]
     
 def acknowledgeCallback():
     alert = st.success('Acknowledge Success, Directory Cleared')
@@ -209,10 +260,10 @@ with tab3:
     txtIn_col1, empty_ol2 = st.columns([0.5, 0.5])
 
     with txtIn_col1:
-        ciphertext_filename = st.text_input('Filename', 
-                                            key='ciphertext_filename',
-                                            value='ciphertext.txt', 
-                                            max_chars=25)
+        st.text_input('Filename', 
+                      key='ciphertext_filename',
+                      value='ciphertext.txt', 
+                      max_chars=25)
         
         container = st.container()
         with container:
