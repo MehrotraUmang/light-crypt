@@ -1,14 +1,15 @@
 '''
 Todo: 
-refactor saveCallback()
-add savePayload button
-refactor acklowledgeCallback()
+refactor saveCallback() - done
+add saveCiphertet button - done
+refactor acklowledgeCallback() - done
+reset globalList in resetCallback
 Complete Cloud tab feature
 {gdrive py api, streamlit secrets for api token}
 
-Comments:
-added tabs, generate data frontend, added data_generator.py, 
-pending tasks in todo
+comments:
+saveCallback -> saveGeneratedCallback, added saveCiphertext button, ciphertext file name,
+
 '''
 import streamlit as st
 import time
@@ -83,7 +84,7 @@ def process(message):
 #########################################
 # Stereamlit button callback functions
 #########################################
-def saveCallback():
+def saveGeneratedCallback():
     if file_type == "CSV":
         generate_csv(num_rows=st.session_state.num_row, 
                      num_columns=st.session_state.num_col, 
@@ -100,6 +101,9 @@ def encryptCallback():
 
 def decryptCallback():
     st.session_state.decryptedText = st.session_state.plainText
+
+def saveCiphertextCallback():
+    st.info("saved ciphertext")
     
 def resetCallback():
     st.session_state.plainText = ''
@@ -118,13 +122,11 @@ def acknowledgeCallback():
 #########################################
 # Stereamlit frontend
 #########################################
-hide_streamlit_style = """
+st.markdown("""
                 <style>
                 footer {visibility: hidden;}
                 </style>
-                """
-
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
 
 st.title('Encryption & Decryption using ECC+AES')
 st.subheader('LightCrypt Demonstration')
@@ -146,7 +148,7 @@ with tab1:
             st.text_input('Filename', key='txt_filename',value='random_text.txt', max_chars=25)
     with col3: 
         st.button(label='Save', key='saveGeneratedData', 
-              on_click=saveCallback, 
+              on_click=saveGeneratedCallback, 
             args=None,
             type="primary")
 with tab2:
@@ -204,13 +206,35 @@ with tab3:
                  help='Decrypted Text',
                  height=heightFix)
 
+    txtIn_col1, empty_ol2 = st.columns([0.5, 0.5])
 
-    st.button(label='Reset', key=None, 
-              help='Click to reset all values', 
-              on_click=resetCallback, 
-              args=None,
-              type="secondary", 
-              use_container_width=False)
+    with txtIn_col1:
+        ciphertext_filename = st.text_input('Filename', 
+                                            key='ciphertext_filename',
+                                            value='ciphertext.txt', 
+                                            max_chars=25)
+        
+        container = st.container()
+        with container:
+            btn_col1, btn_col2 = st.columns([0.4, 0.6])
+            with btn_col1:
+                st.button(label="Save", key=None,
+                          help="Saves ciphertext to text file",
+                          on_click=saveCiphertextCallback,
+                          args=None,
+                          type='primary',
+                          use_container_width=False)
+
+            with btn_col2:
+                st.button(label='Reset', key=None, 
+                          help='Click to reset all values', 
+                          on_click=resetCallback, 
+                          args=None,
+                          type="secondary", 
+                          use_container_width=False)
+
+
+
 with tab4:
     st.button(label='Upload', key=None, 
               help='Acknowledge will delete input file contents', 
