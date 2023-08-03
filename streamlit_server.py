@@ -109,11 +109,20 @@ def encryptCallback():
     process(st.session_state.plainText)
 
 def decryptCallback():
-    #Warning: needs exception handling if index 4 does not exist
-    st.session_state.decryptedText = st.session_state.objList[4]
+    # Warning: needs exception handling if index 4 does not exist
+    # st.session_state.decryptedText = st.session_state.objList[4]
     # experimental: process decrypt when clicked
     # instead of printing already decrypted value at objList[4]
     # assigned when process() is called
+    try:
+        # Check if there's decrypted text available
+        if st.session_state.objList[4] is not None:
+            st.session_state.decryptedText = st.session_state.objList[4]
+        else:
+            st.error("Error: No decrypted text available. Please encrypt a message first.")
+    except IndexError:
+        st.error("Error: Decryption failed. Please make sure you have encrypted a message first.")
+
 
 def saveCiphertextCallback():
     # Warning: does not work when objList is cleared or resetCallback is called before
