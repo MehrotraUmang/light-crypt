@@ -4,5 +4,8 @@ logic/__pycache
 !requirements.txt
 *.csv
 __pycache__/
+generated/
 *.pyc
 ciphertext/
+client_secrets.json
+.streamlit/
