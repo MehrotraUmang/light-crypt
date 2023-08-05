@@ -251,22 +251,23 @@ with tab3:
 
 # Tab 4: Cloud
 with tab4:
+    s3_manager = S3FileManager(bucket_name=S3_BUCKET_NAME)
     st.title('Upload to S3 Bucket')
     uploaded_file = st.file_uploader('Choose a file to upload', type=['txt', 'csv'])
     if uploaded_file is not None:
         st.write('Uploaded file:', uploaded_file.name)
         s3_file_name = st.text_input('Enter the desired S3 file name')
-        if st.button(label='Upload', key=None, help='Click to upload file to AWS S3 bucket', type="primary", ):
-                with st.spinner('Uploading...'):
-                    file_path = f'uploads/{uploaded_file.name}'
+        if st.button(label='Upload', key=None, help='Click to upload file to AWS S3 bucket', type="primary"):
+            with st.spinner('Uploading...'):
+                file_path = f'uploads/{uploaded_file.name}'
                 with open(file_path, 'wb') as f:
-                        f.write(uploaded_file.read())
-                upload_file_to_bucket(file_path, s3_file_name)
+                    f.write(uploaded_file.read())
+                s3_manager.upload_file_to_bucket(file_path, s3_file_name)
 
     # Delete file from S3 bucket
     st.sidebar.title('Files in S3 Bucket')
-    files = list_files_in_bucket()
+    files = s3_manager.list_files_in_bucket()
 
     selected_file = st.sidebar.selectbox('Select a file to delete', files)
     if st.sidebar.button('Delete'):
-        delete_file_from_bucket(selected_file)
+        s3_manager.delete_file_from_bucket(selected_file)
