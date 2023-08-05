@@ -17,6 +17,12 @@ S3_BUCKET_NAME = 'lightcrypt-test-temp'
 if not os.path.exists('uploads'):
     os.makedirs('uploads')
 
+# Function to list files in the S3 bucket
+# Example Usage:
+# Upload a file to the S3 bucket
+# file_path = 'path/to/your/file.txt'
+# file_name = 'file.txt'
+# upload_file_to_bucket(file_path, file_name)
 def list_files_in_bucket():
     try:
         response = s3_client.list_objects(Bucket=S3_BUCKET_NAME)
@@ -33,6 +39,11 @@ def list_files_in_bucket():
         st.error(f'Error listing files in S3 bucket: {e}')
         return []
 
+# Function to upload a file to the S3 bucket
+# Example Usage:
+# List files in the S3 bucket
+# files_list = list_files_in_bucket()
+# st.write("Files in S3 Bucket:", files_list)
 def upload_file_to_bucket(file_path, file_name):
     try:
         start_time = time.time()
@@ -44,6 +55,10 @@ def upload_file_to_bucket(file_path, file_name):
     except Exception as e:
         st.error(f'Error uploading file to S3: {e}')
 
+# Function to delete a file from the S3 bucket
+# Example usage:
+# file_to_delete = 'file.txt'
+# delete_file_from_bucket(file_to_delete)
 def delete_file_from_bucket(file_name):
     try:
         s3_client.delete_object(Bucket=S3_BUCKET_NAME, Key=file_name)
