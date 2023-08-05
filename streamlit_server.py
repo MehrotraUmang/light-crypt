@@ -62,13 +62,15 @@ def write_encryption_data():
 def save_generated_data_callback():
     # Generate and save data based on user input
     if file_type == "CSV":
-        generate_csv(num_rows=st.session_state.num_row, 
-                     num_columns=st.session_state.num_col, 
-                     filename=st.session_state.csv_filename)
+        generator = DataGenerator()
+        generator.generate_csv(num_rows=st.session_state.num_row, 
+                               num_columns=st.session_state.num_col, 
+                               filename=st.session_state.csv_filename)
         st.info(f'{st.session_state.csv_filename} saved at project directory!')
     else:
-        generate_txt(num_tokens=st.session_state.num_tokens, 
-                     filename=st.session_state.txt_filename)
+        generator = DataGenerator()
+        generator.generate_txt(num_tokens=st.session_state.num_tokens, 
+                               filename=st.session_state.txt_filename)
         st.info(f'{st.session_state.txt_filename} saved at project directory!')
 
 def encrypt_callback():
