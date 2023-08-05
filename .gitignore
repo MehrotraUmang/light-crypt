@@ -9,3 +9,4 @@ generated/
 ciphertext/
 client_secrets.json
 .streamlit/
+uploads/
