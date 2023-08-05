@@ -4,6 +4,14 @@ import streamlit as st
 import os
 s3_client = boto3.client('s3')
 
+# Set your AWS credentials (replace with your own credentials)
+'''
+AWS_ACCESS_KEY_ID = "your_access_key_id"
+AWS_SECRET_ACCESS_KEY = "your_secret_access_key"
+AWS_REGION = "us-west-1"  # Replace with your desired AWS region
+S3_BUCKET_NAME = "your_bucket_name"
+'''
+
 S3_BUCKET_NAME = 'lightcrypt-test-temp'
 
 if not os.path.exists('uploads'):
