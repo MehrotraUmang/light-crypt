@@ -56,3 +56,12 @@ def decrypt_ECC(encryptedMsg, privKey):
     secretKey = ecc_point_to_256_bit_key(sharedECCKey)
     plaintext = decrypt_AES_GCM(ciphertext, nonce, authTag, secretKey)
     return plaintext
+
+def generate_ecc_private_key():
+    return secrets.randbelow(curve.field.n)
+
+def generate_ecc_public_key(privKey):
+    return privKey * curve.g
+
+def generate_aes_private_key(pubKey):
+    return ecc_point_to_256_bit_key(secrets.randbelow(curve.field.n) * pubKey)

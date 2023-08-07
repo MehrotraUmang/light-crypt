@@ -20,13 +20,13 @@ def process(message):
     msg = bytes(MESSAGE, encoding="ascii")
 
     # Generate ECC Private Key
-    privKey = secrets.randbelow(curve.field.n)
+    privKey = generate_ecc_private_key()
 
     # Generate ECC Public Key
-    pubKey = privKey * curve.g
+    pubKey = generate_ecc_public_key(privKey)
 
     # Generate AES Private key
-    aesPrivKey = ecc_point_to_256_bit_key(secrets.randbelow(curve.field.n) * pubKey)
+    aesPrivKey = generate_aes_private_key(pubKey)
 
     # Encrypt message
     encryptedMsg = encrypt_ECC(msg, pubKey)
