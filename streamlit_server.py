@@ -20,16 +20,16 @@ def process(message):
     msg = bytes(MESSAGE, encoding="ascii")
 
     # Generate ECC Private Key
-    privKey = generate_ecc_private_key()
+    privKey = ECCAES.generate_ecc_private_key()
 
     # Generate ECC Public Key
-    pubKey = generate_ecc_public_key(privKey)
+    pubKey = ECCAES.generate_ecc_public_key(privKey)
 
     # Generate AES Private key
-    aesPrivKey = generate_aes_private_key(pubKey)
+    aesPrivKey = ECCAES.generate_aes_private_key(pubKey)
 
     # Encrypt message
-    encryptedMsg = encrypt_ECC(msg, pubKey)
+    encryptedMsg = ECCAES.encrypt_ECC(msg, pubKey)
     encryptedMsgObj = {
         'ciphertext': binascii.hexlify(encryptedMsg[0]),
         'nonce': binascii.hexlify(encryptedMsg[1]),
@@ -38,7 +38,7 @@ def process(message):
     }
 
     # Get decrypted message using encryptedMsg and privKey
-    decryptedMsg = decrypt_ECC(encryptedMsg, privKey)
+    decryptedMsg = ECCAES.decrypt_ECC(encryptedMsg, privKey)
     DECRYPTED = decryptedMsg.decode("ascii")
 
     # Store objects in session_state.objList in order
