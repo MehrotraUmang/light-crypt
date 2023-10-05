@@ -31,7 +31,7 @@ import os
 # S3_BUCKET_NAME = "your_bucket_name"
 
 # Specify the S3 bucket name
-S3_BUCKET_NAME = 'lightcrypt-test-temp'
+S3_BUCKET_NAME = 'lightcrypt-bucket'
 
 # Create 'uploads' directory if it doesn't exist
 if not os.path.exists('uploads'):
