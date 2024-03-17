@@ -68,7 +68,7 @@ class S3FileManager:
             end_time = time.time()
             upload_time = end_time - start_time
             st.success(f'File uploaded to S3 bucket: {file_name}')
-            st.info(f'Time taken: {upload_time:.2f} seconds')
+            st.info(f'Time taken: {upload_time:.6f} seconds')
         except Exception as e:
             st.error(f'Error uploading file to S3: {e}')
 

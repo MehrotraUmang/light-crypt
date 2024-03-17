@@ -10,12 +10,13 @@ import os
 
 # Initialize objList in session state
 if 'objList' not in st.session_state:
-    st.session_state.objList = [None, None, None, None, None]
+    st.session_state.objList = [None, None, None, None, None, None, None]
 
 #########################################
 # Main Process Function
 #########################################
 def process(message):
+    start_encryption_time = time.time()
     MESSAGE = message
     msg = bytes(MESSAGE, encoding="ascii")
 
@@ -36,10 +37,20 @@ def process(message):
         'authTag': binascii.hexlify(encryptedMsg[2]),
         'ciphertextPubKey': hex(encryptedMsg[3].x) + hex(encryptedMsg[3].y % 2)[2:]
     }
+    end_encryption_time = time.time()
+
+    encryption_time = end_encryption_time - start_encryption_time
 
     # Get decrypted message using encryptedMsg and privKey
+    start_decryption_time = time.time()
+
+    #st.info(f'Time taken to encrypt: {encryption_time:.6f} seconds')
     decryptedMsg = ECCAES.decrypt_ECC(encryptedMsg, privKey)
     DECRYPTED = decryptedMsg.decode("ascii")
+
+    end_decryption_time = time.time()
+
+    decryption_time = end_decryption_time - start_decryption_time
 
     # Store objects in session_state.objList in order
     st.session_state.objList[0] = str(privKey)
@@ -47,6 +58,8 @@ def process(message):
     st.session_state.objList[2] = str(aesPrivKey)
     st.session_state.objList[3] = str(encryptedMsgObj)
     st.session_state.objList[4] = str(DECRYPTED)
+    st.session_state.objList[5] = str(encryption_time)
+    st.session_state.objList[6] = str(decryption_time)
 
 #########################################
 # Streamlit Button Callback Functions
@@ -76,6 +89,7 @@ def save_generated_data_callback():
 def encrypt_callback():
     # Process and encrypt user input, then write encryption data to session state
     process(st.session_state.plainText)
+    st.info(f'Time taken to encrypt: {st.session_state.objList[5]} seconds')
     write_encryption_data()
 
 def decrypt_callback():
@@ -83,6 +97,7 @@ def decrypt_callback():
         # Check if there's decrypted text available
         if st.session_state.objList[4] is not None:
             st.session_state.decryptedText = st.session_state.objList[4]
+            st.info(f'Time taken to decrypt: {st.session_state.objList[6]} seconds')
         else:
             st.error("Error: No decrypted text available. Please encrypt a message first.")
     except IndexError:
