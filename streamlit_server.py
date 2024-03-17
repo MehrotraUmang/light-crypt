@@ -154,7 +154,7 @@ def reset_text_and_objList_callback():
     st.session_state.aesPrivKey = ''
     st.session_state.cipherText = ''
     st.session_state.decryptedText = ''
-    st.session_state.objList = [None, None, None, None, None]
+    st.session_state.objList = [None, None, None, None, None, None, None]
 
 #########################################
 # Streamlit Frontend
