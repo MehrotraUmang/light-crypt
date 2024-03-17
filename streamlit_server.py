@@ -89,7 +89,11 @@ def save_generated_data_callback():
 def encrypt_callback():
     # Process and encrypt user input, then write encryption data to session state
     process(st.session_state.plainText)
-    st.info(f'Time taken to encrypt: {st.session_state.objList[5]} seconds')
+    time_taken = float(st.session_state.objList[5])
+    if time_taken is not None:
+        st.info(f'Time taken to encrypt: {time_taken:.6f} seconds')
+    else:
+        st.warning("No time data available.")
     write_encryption_data()
 
 def decrypt_callback():
@@ -97,7 +101,11 @@ def decrypt_callback():
         # Check if there's decrypted text available
         if st.session_state.objList[4] is not None:
             st.session_state.decryptedText = st.session_state.objList[4]
-            st.info(f'Time taken to decrypt: {st.session_state.objList[6]} seconds')
+            time_taken = float(st.session_state.objList[6])
+            if time_taken is not None:
+                st.info(f'Time taken to encrypt: {time_taken:.6f} seconds')
+            else:
+                st.warning("No time data available.")
         else:
             st.error("Error: No decrypted text available. Please encrypt a message first.")
     except IndexError:
