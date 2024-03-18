@@ -103,7 +103,7 @@ def decrypt_callback():
             st.session_state.decryptedText = st.session_state.objList[4]
             time_taken = float(st.session_state.objList[6])
             if time_taken is not None:
-                st.info(f'Time taken to encrypt: {time_taken:.6f} seconds')
+                st.info(f'Time taken to decrypt: {time_taken:.6f} seconds')
             else:
                 st.warning("No time data available.")
         else:
