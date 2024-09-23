@@ -26,7 +26,7 @@ def process(message):
     # Generate ECC Public Key
     pubKey = ECCAES.generate_ecc_public_key(privKey)
 
-    # Generate AES Private key
+    # Generate AES Private key, Only for demonstration, actual AES key is handled by the encrypt_ECC method.
     aesPrivKey = ECCAES.generate_aes_private_key(pubKey)
 
     # Encrypt message
